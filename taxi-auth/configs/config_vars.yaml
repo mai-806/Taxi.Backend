@@ -1,0 +1,9 @@
+worker-threads: 4
+worker-fs-threads: 2
+logger-level: debug
+
+is_testing: false
+
+server-port: 8080
+
+dbconnection: 'postgresql://taxi_auth_user:password@localhost:5432/taxi_auth_db_1'
