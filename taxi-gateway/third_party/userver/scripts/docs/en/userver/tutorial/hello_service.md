@@ -6,7 +6,7 @@ Make sure that you can compile and run core tests as described at
 @ref md_en_userver_tutorial_build.
 
 Note that there is a ready to use opensource
-[service template](https://github.com/userver-framework/service_template)
+[service template](https://github.com/userver-framework/APIGateway)
 to ease the development of your userver based services. The template already has
 a preconfigured CI, build and install scripts, testsuite and unit-tests setups.
 

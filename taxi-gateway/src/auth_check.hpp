@@ -7,8 +7,8 @@
 
 namespace APIGateway {
 
-std::string SayHelloTo(std::string_view name);
+int checkCorrectly(std::string name);
 
-void AppendHello(userver::components::ComponentList &component_list);
+void AppendAuth(userver::components::ComponentList &component_list);
 
 } // namespace APIGateway

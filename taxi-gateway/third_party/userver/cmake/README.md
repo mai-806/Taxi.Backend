@@ -10,4 +10,4 @@ include(third_party/userver/cmake/SetupEnvironment.cmake)
 add_subdirectory(third_party/userver)
 ```
 
-See https://github.com/userver-framework/service_template for an example.
+See https://github.com/userver-framework/APIGateway for an example.

@@ -503,7 +503,7 @@ Changelog news also go to the
   [Дмитрий Изволов](https://github.com/izvolov) for the PR.
 * Task processors now have an `os-scheduling` static config option and
   @md_en_userver_task_processors_guide "a usage guide".
-* Added a [pg_service_template](https://github.com/userver-framework/pg_service_template)
+* Added a [pg_APIGateway](https://github.com/userver-framework/pg_APIGateway)
   service template that uses userver the userver framework with PostgreSQL
 * In template services, it is now possible to deploy the environment and run
   the service in one command:  `make service-start-debug` or

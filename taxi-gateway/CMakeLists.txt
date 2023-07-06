@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
-project(service_template CXX)
+project(APIGateway CXX)
 
 include(third_party/userver/cmake/SetupEnvironment.cmake)
 include(GNUInstallDirs)
@@ -11,6 +11,8 @@ add_subdirectory(third_party/userver)
 add_library(${PROJECT_NAME}_objs OBJECT
     src/hello.hpp
     src/hello.cpp
+	src/auth_check.hpp
+	src/auth_check.cpp
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver-core)
 

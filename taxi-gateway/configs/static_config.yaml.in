@@ -1,6 +1,6 @@
 # yaml
 
-config_vars: @CONFIG_VAR_PATH@
+config_vars: /usr/local/etc/APIGateway/config_vars.yaml
 
 components_manager:
     coro_pool:
@@ -33,12 +33,12 @@ components_manager:
                     overflow_behavior: discard  # Drop logs if the system is too busy to write them down.
 
         tracer:                              # Component that helps to trace execution times and requests in logs.
-            service-name: service_template   # "You know. You all know exactly who I am. Say my name. " (c)
+            service-name: APIGateway   # "You know. You all know exactly who I am. Say my name. " (c)
 
         dynamic-config:                      # Dynamic config storage options, do nothing
             fs-cache-path: ''
         dynamic-config-fallbacks:            # Load options from file and push them into the dynamic config storage.
-            fallback-path: @CONFIG_FALLBACK_PATH@
+            fallback-path: /usr/local/etc/APIGateway/dynamic_config_fallback.json
         testsuite-support: {}
 
         http-client:
@@ -64,3 +64,7 @@ components_manager:
             path: /hello                  # Registering handler by URL '/hello'.
             method: GET,POST              # It will only reply to GET (HEAD) and POST requests.
             task_processor: main-task-processor  # Run it on CPU bound task processor
+        handler-auth-check:                    # Finally! Our handler.
+            path: /auth                  # Registering handler by URL '/hello'.
+            method: GET,POST              # It will only reply to GET (HEAD) and POST requests.
+            task_processor: main-task-processor  # Run it on CPU bound task processor    

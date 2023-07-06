@@ -50,7 +50,7 @@ int main(int argc, char* argv[]) {
                             .Append<userver::ugrpc::server::ServerComponent>("")
                             .Append<samples::GreeterServiceComponent>();
 
-  service_template::AppendHello(component_list);
+  APIGateway::AppendHello(component_list);
 
   auto size = std::distance(component_list.begin(), component_list.end());
   std::cout << size << std::endl;
