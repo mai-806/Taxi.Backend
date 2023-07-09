@@ -4,7 +4,7 @@
 
 #include <userver/server/handlers/http_handler_base.hpp>
 
-namespace APIGateway {
+namespace service_template {
 
 namespace {
 
@@ -17,7 +17,7 @@ class Hello final : public userver::server::handlers::HttpHandlerBase {
   std::string HandleRequestThrow(
       const userver::server::http::HttpRequest& request,
       userver::server::request::RequestContext&) const override {
-    return APIGateway::SayHelloTo(request.GetArg("name"));
+    return service_template::SayHelloTo(request.GetArg("name"));
   }
 };
 
@@ -35,4 +35,4 @@ void AppendHello(userver::components::ComponentList& component_list) {
   component_list.Append<Hello>();
 }
 
-}  // namespace APIGateway
+}  // namespace service_template

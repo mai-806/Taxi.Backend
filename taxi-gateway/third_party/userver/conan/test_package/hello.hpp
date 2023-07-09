@@ -5,10 +5,10 @@
 
 #include <userver/components/component_list.hpp>
 
-namespace APIGateway {
+namespace service_template {
 
 std::string SayHelloTo(std::string_view name);
 
 void AppendHello(userver::components::ComponentList& component_list);
 
-}  // namespace APIGateway
+}  // namespace service_template
