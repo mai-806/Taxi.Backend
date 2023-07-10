@@ -62,11 +62,16 @@ components_manager:
             url_trailing_slash: strict-match
 
         handler-hello:                    
-            path: /hello                  
+            path: /v1/hello                  
             method: GET,POST              
             task_processor: main-task-processor 
              
         handler-auth-check:                    
-            path: /auth                  
+            path: /v1/auth                  
             method: GET,POST              
-            task_processor: main-task-processor      
+            task_processor: main-task-processor
+
+        handler-reg-check:                    
+            path: /v1/reg                  
+            method: GET,POST              
+            task_processor: main-task-processor             

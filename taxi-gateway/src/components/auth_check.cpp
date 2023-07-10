@@ -13,6 +13,8 @@ namespace APIGateway {
 
 namespace {
 
+
+
 class AuthCheck final : public userver::server::handlers::HttpHandlerBase {
 public:
   using HttpHandlerBase::HttpHandlerBase;
@@ -45,10 +47,10 @@ public:
     }
 
     auto& client = http_client.GetHttpClient();
-    auto json = hash_password(reqBody);
+    userver::formats::json::Value json = APIGateway::hashPassword(reqBody);
 
     const auto& response = client.CreateRequest()
-                                .post("http://localhost:8080/password", json)
+                                .post("http://localhost:8080/password", userver::formats::json::ToString(json))
                                 .timeout(std::chrono::seconds(1))
                                 .perform();
 
@@ -72,7 +74,7 @@ int checkCorrectly(std::string request) {
     return 0;
 }
 
-userver::formats::json::Value hashPassword(std::string& str_json) {
+userver::formats::json::Value hashPassword(std::string str_json) {
   userver::formats::json::Value json = userver::formats::json::FromString(str_json);
 
   auto password = json["password"].As<std::string>();
@@ -81,13 +83,16 @@ userver::formats::json::Value hashPassword(std::string& str_json) {
   size_t hash_password = std::hash<std::string>{}(password);
 
   userver::formats::json::Value new_json = userver::formats::json::FromString(
-    "\"login\": \"$1\",\n"
-    "\"password\": \"$2\"\n"
-    "\"isDriver\": $3",
+    "{ \n \"login\": \"%s\",\npassword\": \"%s\"\n\"isDriver\": %ld\n }",
     login,
     hash_password,
     isDriver
   );
+
+  // userver::formats::json::Value new_json = userver::formats::json::FromString(R"({
+  //   "login": \"$1,
+  //   "password": ""
+  // })");
 
   return new_json;
 }
