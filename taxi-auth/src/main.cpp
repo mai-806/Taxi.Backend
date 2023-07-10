@@ -20,6 +20,5 @@ int main(int argc, char* argv[]) {
                             .Append<PassRecQuery>()
                             .Append<RegQuery>();
 
-
   return userver::utils::DaemonMain(argc, argv, component_list);
 }
