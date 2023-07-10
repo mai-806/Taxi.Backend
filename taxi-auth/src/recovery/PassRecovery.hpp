@@ -14,32 +14,39 @@
 #include <sstream>
 #include <vector>
 
-static const std::string pgDBIP = "127.0.0.1:8080/pgsql";
+namespace Recovery::vars{
 
-class PassRecQuery final: public userver::server::handlers::HttpHandlerJsonBase{
-    static constexpr std::string_view kName = "recovery-query";
-
-    std::string set_symbols = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*_+{}[]?=/";
+    const std::string pgDBIP = "http://127.0.0.1:8080/pgsql";
+    const std::string set_symbols = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*_+{}[]?=/";
     std::random_device rd{};
     std::mt19937_64 rng{ rd() };
 
-    PassRecQuery(const userver::components::ComponentConfig& config,
-                 const userver::components::ComponentContext& context);
+}
 
-    userver::formats::json::Value HandleRequestJsonThrow(const userver::server::http::HttpRequest &request, 
-                                                         const userver::formats::json::Value &request_json,
-                                                         userver::server::request::RequestContext &context) const override;
+namespace Recovery{
 
-    static std::string makePassRecQuery(const std::vector<std::string>&, userver::clients::http::Client&);
+    class PassRecQuery final: public userver::server::handlers::HttpHandlerJsonBase{
+    public:
+        static constexpr std::string_view kName = "recovery-query";
 
-    static std::vector<std::string> parseJsonData(const userver::formats::json::Value &request_json);
+        PassRecQuery(const userver::components::ComponentConfig&,
+                     const userver::components::ComponentContext&);
 
-    static userver::formats::json::Value Serialize(std::stringstream& stream);
+        userver::formats::json::Value HandleRequestJsonThrow(const userver::server::http::HttpRequest&, 
+                                                             const userver::formats::json::Value&,
+                                                             userver::server::request::RequestContext&) const override;
 
-    static std::string generatePass();
+        static std::string makePassRecQuery(const std::string&, userver::clients::http::Client&);
+        static std::string parseJsonData(const userver::formats::json::Value&);
+        static userver::formats::json::Value Serialize(std::stringstream&);
 
-    void sendPassToEmail(const std::string& recipient_mail, const std::string& new_pass);
+        static std::string generatePass();
+        static void sendPassToEmail(const std::string&, const std::string&);
 
-private:
-    userver::clients::http::Client& httpClient;
-};
+    private:
+
+        userver::clients::http::Client& httpClient;
+
+    };
+
+}
