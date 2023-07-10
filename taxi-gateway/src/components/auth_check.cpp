@@ -45,12 +45,14 @@ public:
     }
 
     auto& client = http_client.GetHttpClient();
+    auto json = hash_password(reqBody);
 
-    const auto response = client.CreateRequest()
-                                .post("http://127.0.0.1:8080/hello", reqBody)
+    const auto& response = client.CreateRequest()
+                                .post("http://localhost:8080/password", json)
                                 .timeout(std::chrono::seconds(1))
                                 .perform();
 
+    response->raise_for_status();
     return response->body();
   }
 };
@@ -68,6 +70,26 @@ int checkCorrectly(std::string request) {
     // if (driver_flag == "Incorrect") return 3;
 
     return 0;
+}
+
+userver::formats::json::Value hashPassword(std::string& str_json) {
+  userver::formats::json::Value json = userver::formats::json::FromString(str_json);
+
+  auto password = json["password"].As<std::string>();
+  const auto login = json["login"].As<std::string>();
+  const auto isDriver = json["isDriver"].As<bool>();
+  size_t hash_password = std::hash<std::string>{}(password);
+
+  userver::formats::json::Value new_json = userver::formats::json::FromString(
+    "\"login\": \"$1\",\n"
+    "\"password\": \"$2\"\n"
+    "\"isDriver\": $3",
+    login,
+    hash_password,
+    isDriver
+  );
+
+  return new_json;
 }
 
 void AppendAuth(userver::components::ComponentList &component_list) {
