@@ -17,7 +17,7 @@ int main(int argc, char* argv[]) {
                             .Append<userver::server::handlers::TestsControl>()
                             .Append<userver::components::Mongo>("");
 
-  APIGateway::AppendHello(component_list);
+  service_template::AppendHello(component_list);
 
   auto size = std::distance(component_list.begin(), component_list.end());
   std::cout << size << std::endl;

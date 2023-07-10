@@ -27,7 +27,7 @@ organization page contains multiple repositories, including:
 
 * [userver](https://github.com/userver-framework/userver) - the C++
   Asynchronous Framework.
-* [APIGateway](https://github.com/userver-framework/APIGateway) -
+* [service_template](https://github.com/userver-framework/service_template) -
   template of a C++ service that uses userver framework with ready-to-user
   build, test and CI scripts. 
 * [uservice-dynconf](https://github.com/userver-framework/uservice-dynconf) -
