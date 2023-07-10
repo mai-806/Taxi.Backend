@@ -12,25 +12,33 @@
 #include <sstream>
 #include <vector>
 
-static const std::string pgDBIP = "127.0.0.1:8080/pgsql";
+namespace Registration::vars {
 
-class RegQuery final: public userver::server::handlers::HttpHandlerJsonBase{
-public:
-    static constexpr std::string_view kName = "reg-query";
+    const std::string pgDBIP = "http://127.0.0.1:8080/pgsql";
 
-    RegQuery(const userver::components::ComponentConfig& config,
-             const userver::components::ComponentContext& context);
+}
 
-    userver::formats::json::Value HandleRequestJsonThrow(const userver::server::http::HttpRequest &request, 
-                                                         const userver::formats::json::Value &request_json,
-                                                         userver::server::request::RequestContext &context) const override;
+namespace Registration{
 
-    static std::string makeRegQuery(const std::vector<std::string>&, userver::clients::http::Client&);
+    class RegQuery final: public userver::server::handlers::HttpHandlerJsonBase{
+    public:
+        static constexpr std::string_view kName = "reg-query";
 
-    static std::vector<std::string> parseJsonData(const userver::formats::json::Value &request_json);
+        RegQuery(const userver::components::ComponentConfig&,
+                 const userver::components::ComponentContext&);
 
-    static userver::formats::json::Value Serialize(std::stringstream& stream);
+        userver::formats::json::Value HandleRequestJsonThrow(const userver::server::http::HttpRequest&, 
+                                                             const userver::formats::json::Value&,
+                                                             userver::server::request::RequestContext&) const override;
 
-private:
-    userver::clients::http::Client& httpClient;
-};
+        static std::string makeRegQuery(const std::vector<std::string>&, userver::clients::http::Client&);
+        static std::vector<std::string> parseJsonData(const userver::formats::json::Value&);
+        static userver::formats::json::Value Serialize(std::stringstream&);
+
+    private:
+
+        userver::clients::http::Client& httpClient;
+
+    };
+
+}

@@ -74,3 +74,14 @@ components_manager:
             path: /v1/rec
             method: DELETE
             task_processor: main-task-processor
+
+        users-db:
+            dbconnection: $dbconnection
+            blocking_task_processor: fs-task-processor
+            dns_resolver: async
+            sync-start: true
+
+        dblistner:
+            path: /pgsql
+            method: GET,POST,DELETE
+            task_processor: main-task-processor
