@@ -13,6 +13,8 @@ add_library(${PROJECT_NAME}_objs OBJECT
     src/components/hello.cpp
 	src/components/auth_check.hpp
 	src/components/auth_check.cpp
+	src/components/reg_check.hpp
+	src/components/reg_check.cpp
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver-core)
 

@@ -8,6 +8,7 @@
 
 #include "components/hello.hpp"
 #include "components/auth_check.hpp"
+#include "components/reg_check.hpp"
 
 int main(int argc, char* argv[]) {
   auto component_list = userver::components::MinimalServerComponentList()
@@ -19,6 +20,7 @@ int main(int argc, char* argv[]) {
 
   APIGateway::AppendHello(component_list);
   APIGateway::AppendAuth(component_list);
+  APIGateay::AppendReg(component_list);
 
   return userver::utils::DaemonMain(argc, argv, component_list);
 }
