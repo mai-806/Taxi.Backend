@@ -57,16 +57,10 @@ components_manager:
             throttling_enabled: false
             url_trailing_slash: strict-match
 
-        handler-hello:                    # Finally! Our handler.
-            path: /v1/hello               # Registering handler by URL '/v1/hello'.
-            method: POST                  # It will only reply to POST requests.
-            task_processor: main-task-processor  # Run it on CPU bound task processor
-
-        postgres-db-1:
-            dbconnection: $dbconnection
-            blocking_task_processor: fs-task-processor
-            dns_resolver: async
-            sync-start: true
-
         dns-client:
             fs-task-processor: fs-task-processor
+
+        auth-query:
+            path: /v1/auth
+            method: GET
+            task_processor: main-task-processor
