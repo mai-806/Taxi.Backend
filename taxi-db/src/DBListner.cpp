@@ -5,17 +5,11 @@ DBListner::DBListner(const userver::components::ComponentConfig& config,
                      HttpHandlerBase(config, context),
                      pg_cluster_(context.FindComponent<userver::components::Postgres>("users-db").GetCluster()){
 
-    constexpr auto kCreateTable = R"~(
-            CREATE TABLE IF NOT EXISTS user_db (
-                id serial PRIMARY KEY,
-                login VARCHAR,
-                password VARCHAR,
-                driver boolean
-            )
-        )~";
+    
  
     using userver::storages::postgres::ClusterHostType;
-    pg_cluster_->Execute(ClusterHostType::kMaster, kCreateTable);
+    LOG_INFO() << "Creating DB Table";
+    pg_cluster_->Execute(ClusterHostType::kMaster, userver::formats::postgre::response::kCreateTable);
 
 }
 
@@ -25,80 +19,104 @@ std::string DBListner::HandleRequestThrow(const userver::server::http::HttpReque
 
     auto method = request.GetMethod();
 
+    LOG_INFO() << "Looking for HTTP method:";
     switch(method){
         case(userver::server::http::HttpMethod::kGet):
+            LOG_INFO() << "GET";
             return checkUser(request);
 
         case(userver::server::http::HttpMethod::kPost):
+            LOG_INFO() << "POST";
             return registerUser(request);
 
         case(userver::server::http::HttpMethod::kDelete):
+            LOG_INFO() << "DELETE";
             return changePassword(request);
 
         default:
+            LOG_DEBUG() << "no method founded";
             return "method not found";
     }
 
 }
 
-const userver::storages::postgres::Query checkQuery{"SELECT password FROM user_db WHERE login=$1",
-                                                        userver::storages::postgres::Query::Name{"sample_check"}};
-
 std::string DBListner::checkUser(const userver::server::http::HttpRequest& request) const{
 
     using userver::storages::postgres::ClusterHostType;
 
+    LOG_INFO() << "Getting data from request";
     std::string_view login = request.GetArg("login");
+    std::string_view password = request.GetArg("pass");
 
-    auto result = pg_cluster_->Execute(ClusterHostType::kSlave, checkQuery, login);
+    LOG_INFO() << "Checks for user";
+    auto result = pg_cluster_->Execute(ClusterHostType::kSlave, userver::formats::postgre::response::checkQuery, login);
 
     if(result.IsEmpty()){
+        LOG_DEBUG() << "no user founded";
         return "account does not exist";
     }
 
-    std::string_view password = request.GetArg("pass");
-
     if(result[0]["password"].As<std::string>() != password){
+        LOG_DEBUG() << "wrong password founded";
         return "wrong password";
     }
 
-    return "ok!";
-}
+    if(result[0]["driver"].As<bool>()){
+        LOG_INFO() << "driver founded";
+        return "driver " + result[0]["id"].As<std::string>();
+    }
+    else if(result[0]["admin"].As<bool>()){
+        LOG_INFO() << "admin founded";
+        return "admin " + result[0]["id"].As<std::string>();
+    }
 
-const userver::storages::postgres::Query registerQuery{"INSERT INTO user_db VALUES (DEFAULT, $1, $2, FALSE)",
-                                                        userver::storages::postgres::Query::Name{"sample_reg"}};
+    LOG_INFO() << "user founded";
+    return "user " + result[0]["id"].As<std::string>();
+
+}
 
 std::string DBListner::registerUser(const userver::server::http::HttpRequest& request) const{
 
     using userver::storages::postgres::ClusterHostType;
 
+    LOG_INFO() << "Getting data from request";
     std::string_view login = request.GetArg("login");
+    std::string_view password = request.GetArg("pass");
+    std::string_view driver = request.GetArg("driver");
+    std::string_view admin = request.GetArg("admin");
 
-    auto result = pg_cluster_->Execute(ClusterHostType::kSlave, checkQuery, login);
+    LOG_INFO() << "Checks for user";
+    auto result = pg_cluster_->Execute(ClusterHostType::kSlave, userver::formats::postgre::response::checkQuery, login);
 
     if(!result.IsEmpty()){
+        LOG_DEBUG() << "user already exist";
         return "already exist";
     }
-
-    std::string_view password = request.GetArg("pass");
-
     
-    pg_cluster_->Execute(ClusterHostType::kMaster, registerQuery, login, password);
+    LOG_INFO() << "Registering user";
+    pg_cluster_->Execute(ClusterHostType::kMaster, userver::formats::postgre::response::registerQuery, login, password, driver, admin);
 
     return "registered";
 }
-
-const userver::storages::postgres::Query changeQuery{"UPDATE user_db SET password=$1 WHERE login=$2",
-                                                        userver::storages::postgres::Query::Name{"sample_check"}};
 
 std::string DBListner::changePassword(const userver::server::http::HttpRequest& request) const{
 
     using userver::storages::postgres::ClusterHostType;
 
+    LOG_INFO() << "Getting data from request";
     std::string_view login = request.GetArg("login");
     std::string_view password = request.GetArg("pass");
 
-    pg_cluster_->Execute(ClusterHostType::kMaster, changeQuery, password, login);
+    LOG_INFO() << "Checks for user";
+    auto result = pg_cluster_->Execute(ClusterHostType::kSlave, userver::formats::postgre::response::checkQuery, login);
 
-    return "changed!";
+    if(result.IsEmpty()){
+        LOG_DEBUG() << "no user founded";
+        return "account does not exist";
+    }
+
+    LOG_INFO() << "Changing password";
+    pg_cluster_->Execute(ClusterHostType::kMaster, userver::formats::postgre::response::changeQuery, password, login);
+
+    return "ok!";
 }

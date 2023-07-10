@@ -61,3 +61,6 @@ components_manager:
             fs-task-processor: fs-task-processor
 
         auth-query:
+            path: /v1/auth
+            method: GET
+            task_processor: main-task-processor
