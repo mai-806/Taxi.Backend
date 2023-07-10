@@ -6,8 +6,8 @@
 #include <userver/testsuite/testsuite_support.hpp>
 #include <userver/utils/daemon_run.hpp>
 
-#include "hello.hpp"
-#include "auth_check.hpp"
+#include "components/hello.hpp"
+#include "components/auth_check.hpp"
 
 int main(int argc, char* argv[]) {
   auto component_list = userver::components::MinimalServerComponentList()

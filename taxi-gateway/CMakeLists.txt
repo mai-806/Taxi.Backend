@@ -9,10 +9,10 @@ add_subdirectory(third_party/userver)
 
 # Common sources
 add_library(${PROJECT_NAME}_objs OBJECT
-    src/hello.hpp
-    src/hello.cpp
-	src/auth_check.hpp
-	src/auth_check.cpp
+    src/components/hello.hpp
+    src/components/hello.cpp
+	src/components/auth_check.hpp
+	src/components/auth_check.cpp
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver-core)
 
@@ -21,18 +21,16 @@ target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver-core)
 add_executable(${PROJECT_NAME} src/main.cpp)
 target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}_objs)
 
-
 # Unit Tests
 add_executable(${PROJECT_NAME}_unittest
-    src/hello_test.cpp
+    src/tests/hello_test.cpp
 )
 target_link_libraries(${PROJECT_NAME}_unittest PRIVATE ${PROJECT_NAME}_objs userver-utest)
 add_google_tests(${PROJECT_NAME}_unittest)
 
-
 # Benchmarks
 add_executable(${PROJECT_NAME}_benchmark
-	src/hello_benchmark.cpp
+	src/benchmarks/hello_benchmark.cpp
 )
 target_link_libraries(${PROJECT_NAME}_benchmark PRIVATE ${PROJECT_NAME}_objs userver-ubench)
 add_google_benchmark_tests(${PROJECT_NAME}_benchmark)
