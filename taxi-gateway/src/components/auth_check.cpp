@@ -80,7 +80,7 @@ userver::formats::json::Value hashPassword(std::string& str_json) {
   const auto isDriver = json["isDriver"].As<bool>();
   size_t hash_password = std::hash<std::string>{}(password);
 
-  userver::formats::json::Value json = userver::formats::json::FromString(
+  userver::formats::json::Value new_json = userver::formats::json::FromString(
     "\"login\": \"$1\",\n"
     "\"password\": \"$2\"\n"
     "\"isDriver\": $3",
@@ -89,8 +89,7 @@ userver::formats::json::Value hashPassword(std::string& str_json) {
     isDriver
   );
 
-  return json;
-
+  return new_json;
 }
 
 void AppendAuth(userver::components::ComponentList &component_list) {
