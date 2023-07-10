@@ -64,3 +64,13 @@ components_manager:
             path: /v1/auth
             method: GET
             task_processor: main-task-processor
+
+        reg-query:
+            path: /v1/reg
+            method: POST
+            task_processor: main-task-processor
+
+        recovery-query:
+            path: /v1/rec
+            method: DELETE
+            task_processor: main-task-processor
