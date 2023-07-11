@@ -9,6 +9,8 @@
 #include "components/hello.hpp"
 #include "components/auth_check.hpp"
 #include "components/reg_check.hpp"
+#include "components/get_logo/GetLogoQuery.hpp"
+#include "components/profile_photo/ProfilePhotoQuery.hpp"
 
 int main(int argc, char* argv[]) {
   auto component_list = userver::components::MinimalServerComponentList()
@@ -16,7 +18,9 @@ int main(int argc, char* argv[]) {
                             .Append<userver::components::TestsuiteSupport>()
                             .Append<userver::components::HttpClient>()
                             .Append<userver::clients::dns::Component>()
-                            .Append<userver::server::handlers::TestsControl>();
+                            .Append<userver::server::handlers::TestsControl>()
+                            .Append<ProfilePhoto::ProfilePhotoQuery>()
+                            .Append<GetLogo::GetLogoQuery>();
 
   APIGateway::AppendHello(component_list);
   APIGateway::AppendAuth(component_list);
