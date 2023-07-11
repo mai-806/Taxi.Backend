@@ -15,6 +15,10 @@ add_library(${PROJECT_NAME}_objs OBJECT
 	src/components/auth_check.cpp
 	src/components/reg_check.hpp
 	src/components/reg_check.cpp
+	src/components/get_logo/GetLogoQuery.cpp
+	src/components/get_logo/GetLogoQuery.hpp
+	src/components/profile_photo/ProfilePhotoQuery.cpp
+	src/components/profile_photo/ProfilePhotoQuery.hpp
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver-core)
 

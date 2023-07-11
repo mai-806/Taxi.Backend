@@ -74,4 +74,30 @@ components_manager:
         handler-reg-check:                    
             path: /v1/reg                  
             method: GET,POST              
-            task_processor: main-task-processor             
+            task_processor: main-task-processor  
+
+        mongo-taxi:
+            dbconnection: mongodb://localhost:54321/admin
+            appname: userver-sample
+            conn_timeout: 2s
+            so_timeout: 10s
+            queue_timeout: 1s
+            initial_size: 16
+            max_size: 128
+            idle_limit: 64
+            connecting_limit: 8
+            local_threshold: 15ms
+            maintenance_period: 15s
+            stats_verbosity: terse
+
+        handler-profile-photos:
+            path: /v1/profphoto
+            method: GET,POST
+            task_processor: main-task-processor
+
+        handler-logo:
+            path: /v1/logo
+            method: GET,POST
+            task_processor: main-task-processor
+
+            
